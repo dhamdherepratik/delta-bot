@@ -41,10 +41,9 @@ should only be sent after a candle closes.
 The endpoint also accepts JSON such as `{"signal":"UT Long"}`, but no Pine
 Script change is required for the current plain-text alert messages.
 
-## Operational limitation
+## Operational note
 
-The service intentionally uses one Gunicorn worker because position direction
-is held in memory. A deployment or restart resets that state. Before production
-use, position state should be reconciled with the Delta positions API or stored
-in a persistent database. Also choose a Render plan that stays awake; a sleeping
-instance can delay a time-sensitive webhook while it starts.
+The service checks Delta's live position before acting on every signal, so a
+deployment, restart, or manual close does not leave stale position state in the
+web process. Choose a Render plan that stays awake; a sleeping instance can
+delay a time-sensitive webhook while it starts.
