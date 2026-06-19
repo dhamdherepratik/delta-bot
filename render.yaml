@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: tradingview-delta-webhook
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn --workers 1 --threads 4 --timeout 30 --bind 0.0.0.0:$PORT server:app
+    healthCheckPath: /
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: DELTA_BASE_URL
+        value: https://cdn-ind.testnet.deltaex.org
+      - key: DELTA_PRODUCT_ID
+        value: "84"
+      - key: DELTA_ORDER_SIZE
+        value: "1"
+      - key: DELTA_API_KEY
+        sync: false
+      - key: DELTA_API_SECRET
+        sync: false
+      - key: WEBHOOK_SECRET
+        generateValue: true
